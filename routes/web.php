@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\WishlistItemController;
 use App\Http\Controllers\ShippingAddressController;
+use App\Http\Controllers\BlogController;
 
 
 
@@ -31,6 +32,7 @@ Route::post('/wishlist/add/{productId}', [WishlistController::class, 'addToWishl
 Route::resource('order', OrderController::class);
 Route::resource('orderitem', OrderItemController::class);
 Route::resource('shipping_addresses', ShippingAddressController::class);
+Route::resource('blogs', BlogController::class);
 
 
 Route::get('register', [AuthViewController::class, 'showRegistrationForm'])->name('register');
@@ -38,10 +40,3 @@ Route::post('register', [AuthViewController::class, 'register']);
 Route::get('login', [AuthViewController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthViewController::class, 'login']);
 Route::post('logout', [AuthViewController::class, 'logout'])->name('logout');
-
-// Route::middleware(['auth'])->group(function () {
-//     Route::resource('products.images', ProductImageController::class)->except(['index', 'show']);
-//     Route::get('products/{productId}/images/create', [ProductImageController::class, 'create'])->name('productimages.create');
-//     Route::post('products/{productId}/images', [ProductImageController::class, 'store'])->name('productimages.store');
-//     Route::delete('products/{productId}/images/{imageId}', [ProductImageController::class, 'destroy'])->name('productimages.destroy');
-// });
