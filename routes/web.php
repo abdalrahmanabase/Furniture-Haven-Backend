@@ -14,6 +14,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\WishlistItemController;
 use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CheckoutController;
 
 
 
@@ -33,7 +34,9 @@ Route::resource('order', OrderController::class);
 Route::resource('orderitem', OrderItemController::class);
 Route::resource('shipping_addresses', ShippingAddressController::class);
 Route::resource('blogs', BlogController::class);
-
+Route::resource('checkout', CheckoutController::class);
+Route::post('/checkout/select-address', [CheckoutController::class, 'selectAddress'])->name('checkout.selectAddress');
+Route::post('/checkout/confirm-order', [CheckoutController::class, 'confirmOrder'])->name('checkout.confirmOrder');
 
 Route::get('register', [AuthViewController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [AuthViewController::class, 'register']);

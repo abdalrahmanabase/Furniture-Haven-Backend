@@ -7,6 +7,21 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+        {{-- Error Message --}}
+        @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    {{-- Display Validation Errors --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     @if($cart && $cart->cartItems->count())
         <table class="table">
@@ -40,7 +55,7 @@
                 @endforeach
             </tbody>
         </table>
-
+        <a href="{{route('checkout.index')}}" class="btn btn-primary">checkout</a>
     @else
         <p>Your cart is empty.</p>
     @endif

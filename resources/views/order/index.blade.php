@@ -51,9 +51,6 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- Pagination Links -->
-        {{ $orders->links() }}
     @endif
 </div>
 @endsection

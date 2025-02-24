@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\CartItem;
+use App\Models\Cart;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,29 +22,49 @@ class OrderController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     */
+     **/
     public function store(Request $request)
     {
+        $user = Auth::user();
+
+        // Fetch the user's cart
+        $cart = Cart::where('user_id', $user->id)->first();
+
+        if (!$cart) {
+            return redirect()->route('carts.index')->with('error', 'Your cart is empty.');
+        }
+
+        // Fetch cart items with products
+        $cartItems = $cart->cartItems()->with('product')->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('carts.index')->with('error', 'Your cart is empty.');
+        }
+
+        // Calculate the total price
+        $totalPrice = $cartItems->sum(function ($item) {
+            return $item->quantity * $item->product->price;
+        });
+
+        // Create a new order
         $order = new Order();
-        $order->user_id = Auth::id();
-        $order->status = 'pending';
+        $order->user_id = $user->id;
+        $order->total_price = $totalPrice;
+        $order->status = 'pending'; // Default status
+        $order->payment_method = 'cash'; // Default payment method
         $order->save();
 
-        $cartItems = CartItem::where('user_id', Auth::id())->get();
-
+        // Create order items and update product quantities
         foreach ($cartItems as $cartItem) {
             $orderItem = new OrderItem();
             $orderItem->order_id = $order->id;
             $orderItem->product_id = $cartItem->product_id;
-            $orderItem->quantity = $cartItem->quantity;
+            $orderItem->quantity = $cartItem->quantity; 
             $orderItem->save();
-
-            $product = Product::find($cartItem->product_id);
-            $product->quantity -= $cartItem->quantity;
-            $product->save();
-
-            $cartItem->delete();
         }
+
+        // Clear the cart
+        $cart->cartItems()->delete();
 
         return redirect()->route('order.index')->with('success', 'Your order has been placed successfully.');
     }
@@ -52,10 +72,12 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show($id)
     {
+        $order = Order::with('orderItems.product')->findOrFail($id);
         return view('order.show', compact('order'));
     }
+    
 
     /**
      * Update the specified resource in storage.

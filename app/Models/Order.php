@@ -11,7 +11,7 @@ class Order extends Model
     use HasFactory;
     protected $guarded =[];
 
-    public function orderitem(){
+    public function orderitems(){
         return $this->hasMany(OrderItem::class);
     }
     public function user(){

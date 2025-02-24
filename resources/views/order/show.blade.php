@@ -46,14 +46,21 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if ($order->orderItems && $order->orderItems->count() > 0)
                         @foreach ($order->orderItems as $item)
                             <tr>
-                                <td>{{ $item->product->name }}</td>
+                                <td>{{ $item->product->title ?? 'N/A' }}</td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>${{ number_format($item->product->price, 2) }}</td>
-                                <td>${{ number_format($item->quantity * $item->product->price, 2) }}</td>
+                                <td>${{ number_format($item->product->price ?? 0, 2) }}</td>
+                                <td>${{ number_format(($item->quantity * ($item->product->price ?? 0)), 2) }}</td>
                             </tr>
                         @endforeach
+                    @else
+                        <tr>
+                            <td colspan="4">No items in this order.</td>
+                        </tr>
+                    @endif
+                    
                     </tbody>
                 </table>
             </div>
@@ -61,7 +68,7 @@
     </div>
 
     <div class="mt-4">
-        <a href="{{ route('orders.index') }}" class="btn btn-secondary">Back to Orders</a>
+        <a href="{{ route('order.index') }}" class="btn btn-secondary">Back to Orders</a>
     </div>
 </div>
 @endsection
