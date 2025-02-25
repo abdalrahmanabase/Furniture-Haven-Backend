@@ -1,10 +1,8 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +14,9 @@ class BlogApiController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::all();
+        // Fetch all blogs with category name
+        $blogs = Blog::with('category:id,name')->get();
+
         return response()->json(['blogs' => $blogs], 200);
     }
 
@@ -46,7 +46,10 @@ class BlogApiController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        return response()->json(['message' => 'Blog created successfully', 'blog' => $blog], 201);
+        return response()->json([
+            'message' => 'Blog created successfully',
+            'blog' => $blog->load('category:id,name')
+        ], 201);
     }
 
     /**
@@ -54,7 +57,10 @@ class BlogApiController extends Controller
      */
     public function show(Blog $blog)
     {
-        return response()->json(['blog' => $blog], 200);
+        // Include category name in response
+        return response()->json([
+            'blog' => $blog->load('category:id,name')
+        ], 200);
     }
 
     /**
@@ -87,7 +93,10 @@ class BlogApiController extends Controller
             'image' => $blog->image,
         ]);
 
-        return response()->json(['message' => 'Blog updated successfully', 'blog' => $blog], 200);
+        return response()->json([
+            'message' => 'Blog updated successfully',
+            'blog' => $blog->load('category:id,name')
+        ], 200);
     }
 
     /**
