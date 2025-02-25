@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request) // Add Request $request parameter
-    {
-        // Validate the request using $request->validate()
+    public function register(Request $request){
         $fields = $request->validate([
             'user_name' => 'required|string',
             'email' => 'required|string|email|unique:users,email',
@@ -32,12 +30,11 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'token' => $token,
-        ], 201); // 201 status code for successful creation
+        ], 201); 
     }
 
-    public function login(Request $request) // Add Request $request parameter
+    public function login(Request $request) 
     {
-        // Validate the request using $request->validate()
         $fields = $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -46,9 +43,8 @@ class AuthController extends Controller
         // Find the user
         $user = User::where('email', $fields['email'])->first();
 
-        // Check credentials
         if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401); // 401 status code for unauthorized
+            return response()->json(['message' => 'Invalid credentials'], 401); 
         }
 
         // Generate a token
@@ -61,12 +57,10 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(Request $request) // Add Request $request parameter
+    public function logout(Request $request) 
     {
-        // Revoke all tokens for the authenticated user
         $request->user()->tokens()->delete();
 
-        // Return the response
         return response()->json(['message' => 'Logged out successfully']);
     }
 }

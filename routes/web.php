@@ -24,16 +24,21 @@ Route::get('/',[TestController::class,'index'])->name('home');
 Route::resource('categories', CategoryController::class);
 Route::resource('brands', BrandController::class);
 Route::resource('products', ProductController::class);
+
 Route::resource('carts', CartController::class);
 Route::resource('cartitems', CartItemController::class);
 Route::post('/cart/add/{productId}', [CartController::class, 'addToCart'])->name('cart.add')->middleware('auth');
+
 Route::resource('wishlist', WishlistController::class)->middleware('auth');
 Route::resource('wishlistitems', WishlistItemController::class)->middleware('auth');
 Route::post('/wishlist/add/{productId}', [WishlistController::class, 'addToWishlist'])->name('wishlist.add')->middleware('auth');
+
 Route::resource('order', OrderController::class);
 Route::resource('orderitem', OrderItemController::class);
+
 Route::resource('shipping_addresses', ShippingAddressController::class);
 Route::resource('blogs', BlogController::class);
+
 Route::resource('checkout', CheckoutController::class);
 Route::post('/checkout/select-address', [CheckoutController::class, 'selectAddress'])->name('checkout.selectAddress');
 Route::post('/checkout/confirm-order', [CheckoutController::class, 'confirmOrder'])->name('checkout.confirmOrder');
