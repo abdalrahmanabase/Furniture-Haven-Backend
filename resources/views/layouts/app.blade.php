@@ -45,6 +45,8 @@
             <li><div class="li"><a href="{{route('orders')}}"><i class="fa-solid fa-folder-open"></i>Orders</a></div></li>
             <li><div class="li"><a href="{{route('products.index')}}"><i class="fa-solid fa-list"></i>Products</a></div></li>
             <li><div class="li"><a href="{{route('blogs.index')}}"><i class="fa-solid fa-blog"></i>Blogs</a></div></li>
+            <li><div class="li"><a href="{{route('categories.index')}}"><i class="fas fa-folder"></i>Categories</a></div></li>
+            <li><div class="li"><a href="{{route('brands.index')}}"><i class="fa-solid fa-star"></i>Brands</a></div></li>
         </ul>
     </div>
 
