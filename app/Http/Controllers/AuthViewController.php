@@ -13,8 +13,6 @@ class AuthViewController  extends Controller
     /**
      * Display a listing of the resource.
      */
- 
-
     public function register(Request $request)
     {
         $fields = $request->validate([
@@ -70,4 +68,5 @@ class AuthViewController  extends Controller
         Auth::logout();
         return redirect('/'); 
     }
+    
 }

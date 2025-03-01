@@ -1,0 +1,223 @@
+a{
+    text-decoration: none;
+    color: #000000c2;
+    transition: color 0.3s ease;
+}
+
+a:hover{
+    color: #86b7fe;
+}
+h1,h2,h3{
+    margin: 0;
+    padding: 0;
+}
+p{
+    margin: 0;
+    padding:0;
+
+}
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+li{
+    margin: 0;
+    padding: 0;
+}
+.maincontinar{
+    display: flex;
+    margin: 0;
+    padding:1% 0;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.contentmain{
+    width: 80%;
+    padding: 0 1%;
+}
+/* sidebar-start */
+.sidebar{
+    display: block;
+    width: 20%;
+    padding: 1% 2%;
+}
+
+.sidebarbrand{
+    height: 8vh;
+}
+
+.sidebarbrand h2{
+    font-size: x-large;
+    font-weight: 700;
+    text-align: center;
+    color: #86b7fe;
+}
+
+.sidebar ul{
+    padding: 0 5%;
+}
+
+.li{
+    padding: 10% 0;
+    border: 0 solid transparent;
+    transition: background-color 0.3s ease;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.li:hover{
+    background-color: #adb5bd2b;
+}
+
+.sidebar ul li a i{
+    padding: 5%;
+    background-color: white;
+    border-radius: 12px;
+    margin-inline-end: 5%;
+}
+
+/* sidebar-end */
+
+/* navbar-start */
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1% ;
+    height: 8vh;
+    width: 100%;
+}
+
+.navdiv1{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 50%;
+}
+
+.navdiv1 h3{
+    margin-inline-end: 4%;
+}
+
+.navdiv1 span{
+    color: #00000057;
+    font-weight: 400;
+    margin-inline-end: 2%;
+
+}
+
+.navdiv1 p{
+    color: black;
+}
+
+.navdiv2{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 50%;
+}
+
+.navdiv2 i{
+    color: gray !important;
+    margin-inline-end: 5%;
+}
+.navdiv2 a:hover{
+    color: red !important;
+}
+/* navbar-end */
+
+.firstcards{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2%;
+}
+
+.firstcard{
+    width: 23%;
+    padding: 2%;
+    background: linear-gradient(175deg, #1e1e1e, #131313c7);
+    color: white;
+    border-radius: 15px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4), -4px -4px 10px rgba(255, 255, 255, 0.05);
+}
+
+.firstcard2{
+    width: 23%;
+    padding: 2%;
+    background: linear-gradient(172deg, #4a90e2, #0a58cae6);
+    color: white;
+    border-radius: 15px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4), -4px -4px 10px rgba(255, 255, 255, 0.05);
+}
+
+.firstcards h2{
+    color: #cfcfcf;
+    font-size: large;
+    font-weight: 400;
+}
+
+.firstcards span{
+    font-size: larger;
+    font-weight: 500;
+}
+
+.chart-container {
+    width: 100%;
+    height: 50vh;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+.buttons {
+    margin-bottom: 2%;
+    margin-top: 2%;
+}
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.active {
+    background-color: #86b7fe;
+    color: white;
+}
+canvas {
+    max-width: 100%;
+}
+.usersdis{
+    width: 100%;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+th {
+    background: #86b7fe;
+    color: white;
+}
+tr:hover {
+    background: #f1f1f1;
+}

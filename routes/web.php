@@ -15,11 +15,16 @@ use App\Http\Controllers\WishlistItemController;
 use App\Http\Controllers\ShippingAddressController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DashbourdController;
 
 
 
 
-Route::get('/',[TestController::class,'index'])->name('home');
+Route::get('/test',[TestController::class,'index'])->name('home');
+Route::get('/',[DashbourdController::class,'index'])->name('OverView');
+Route::get('users', [DashbourdController::class,'getallusers'])->name('getusers');
+Route::get('orders', [DashbourdController::class,'getallorders'])->name('getorders');
+
 
 Route::resource('categories', CategoryController::class);
 Route::resource('brands', BrandController::class);
@@ -42,6 +47,7 @@ Route::resource('blogs', BlogController::class);
 Route::resource('checkout', CheckoutController::class);
 Route::post('/checkout/select-address', [CheckoutController::class, 'selectAddress'])->name('checkout.selectAddress');
 Route::post('/checkout/confirm-order', [CheckoutController::class, 'confirmOrder'])->name('checkout.confirmOrder');
+
 
 Route::get('register', [AuthViewController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [AuthViewController::class, 'register']);
