@@ -47,7 +47,6 @@ class DashbourdController extends Controller
                 ->where('user_id', $user->id)
                 ->orderByDesc('last_activity') // Get the most recent session
                 ->first();
-
             $user->last_login_at = $lastSession ? \Carbon\Carbon::createFromTimestamp($lastSession->last_activity) : null;
             return $user;
         });
@@ -58,15 +57,29 @@ class DashbourdController extends Controller
         if (!Auth::check()) {
             return redirect('login')->with('error', 'You must be logged in to add items to the wishlist.');
         }
+        $usersdal = User::select('id', 'user_name', 'email')
+        ->withCount('orders') // Counts total orders per user
+        ->get()
+        ->map(function ($user) {
+            $lastSession = DB::table('sessions')
+                ->where('user_id', $user->id)
+                ->orderByDesc('last_activity') // Get the most recent session
+                ->first();
+            $user->last_login_at = $lastSession ? \Carbon\Carbon::createFromTimestamp($lastSession->last_activity) : null;
+            return $user;
+        });
         $users=User::all();
-        return view('dashbourd.usersdisplay',compact('users'));
+        return view('dashbourd.usersdisplay',compact('users','usersdal'));
     }
 
-    public function getallorders(){
+    public function getallorders()
+    {
         if (!Auth::check()) {
-            return redirect('login')->with('error', 'You must be logged in to add items to the wishlist.');
+            return redirect('login')->with('error', 'You must be logged in to view orders.');
         }
-        $orders=Order::all();
-        return view('dashbourd.orderdisplay',compact('orders'));
+
+        $orders = Order::with(['user', 'orderItems.product'])->get();
+
+        return view('dashbourd.ordersdisplay', compact('orders'));
     }
 }

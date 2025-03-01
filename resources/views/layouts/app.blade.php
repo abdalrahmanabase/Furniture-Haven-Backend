@@ -41,8 +41,8 @@
         </div>
         <ul>
             <li><div class="li"> <a href="{{route('OverView')}}"><i class="fa-solid fa-house"></i>Over View</a></div></li>
-            <li><div class="li"><a href="{{route('getusers')}}"><i class="fa-solid fa-users"></i>Users</a></div></li>
-            <li><div class="li"><a href="{{route('getorders')}}"><i class="fa-solid fa-folder-open"></i>Orders</a></div></li>
+            <li><div class="li"><a href="{{route('users')}}"><i class="fa-solid fa-users"></i>Users</a></div></li>
+            <li><div class="li"><a href="{{route('orders')}}"><i class="fa-solid fa-folder-open"></i>Orders</a></div></li>
             <li><div class="li"><a href="{{route('products.index')}}"><i class="fa-solid fa-list"></i>Products</a></div></li>
             <li><div class="li"><a href="{{route('blogs.index')}}"><i class="fa-solid fa-blog"></i>Blogs</a></div></li>
         </ul>
