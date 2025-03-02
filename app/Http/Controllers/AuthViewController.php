@@ -4,14 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-// use Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthViewController  extends Controller
+class AuthViewController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Show the login form and store the previous page URL.
+     */
+    public function showLoginForm(Request $request)
+    {
+        session(['previous_url' => url()->previous()]); // Store previous URL
+        return view('auth.login');
+    }
+
+    /**
+     * Show the registration form and store the previous page URL.
+     */
+    public function showRegistrationForm(Request $request)
+    {
+        session(['previous_url' => url()->previous()]); // Store previous URL
+        return view('auth.register');
+    }
+
+    /**
+     * Handle user registration.
      */
     public function register(Request $request)
     {
@@ -21,28 +38,23 @@ class AuthViewController  extends Controller
             'password' => 'required|string|min:8'
         ]);
 
-        // Create the user
+        // Create user
         $user = User::create([
             'user_name' => $fields['user_name'],
             'email' => $fields['email'],
             'password' => Hash::make($fields['password']),
         ]);
 
-        // Optionally, you can log the user in after registration
+        // Log in the user
         Auth::login($user);
-        return redirect()->route('home');
+
+        // Redirect to previous page or home if not found
+        return redirect()->intended(session('previous_url', route('home')));
     }
 
-    public function showRegistrationForm()
-    {
-        return view('auth.register'); // Your login form view
-    }
-
-    public function showLoginForm()
-    {
-        return view('auth.login'); // Your login form view
-    }
-
+    /**
+     * Handle user login.
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -53,20 +65,22 @@ class AuthViewController  extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return ['message' => 'Invalid credentials'];
+            return back()->withErrors(['email' => 'Invalid credentials']);
         }
 
-        // Log the user in
+        // Log in the user
         Auth::login($user);
 
-        // Redirect to the homepage or any other page after login
-        return redirect()->route('home');
+        // Redirect to previous page or home if not found
+        return redirect()->intended(session('previous_url', route('home')));
     }
 
+    /**
+     * Handle user logout.
+     */
     public function logout()
     {
         Auth::logout();
-        return redirect('/'); 
+        return redirect('/');
     }
-    
 }
