@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::apiResource('carts', CartApiController::class);
     Route::apiResource('cartitems', CartitemApiController::class);
-    Route::post('/cart/add/{productId}', [CartApiController::class, 'addToCart'])->name('cart.add');
+    Route::post('/carts/add/{productId}', [CartApiController::class, 'addToCart'])->name('cart.add');
 
     Route::apiResource('wishlist', WishlistApiController::class);
     Route::apiResource('wishlistitems', WishlistitemApiController::class);
