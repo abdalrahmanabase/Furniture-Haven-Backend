@@ -26,7 +26,9 @@ Route::get('blogs', [BlogApiController::class, 'index'])->name('blogs.index');
 
 Route::middleware('auth:sanctum')->group(function () {
     
-    Route::apiResource('carts', CartApiController::class);
+    Route::get('/carts', [CartApiController::class, 'index']);
+    Route::post('/carts', [CartApiController::class, 'store']);
+    Route::delete('/carts/clear', [CartApiController::class, 'clearCart']);
     Route::apiResource('cartitems', CartitemApiController::class);
     Route::post('/carts/add/{productId}', [CartApiController::class, 'addToCart'])->name('cart.add');
 

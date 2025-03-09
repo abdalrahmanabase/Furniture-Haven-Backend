@@ -16,13 +16,28 @@ class CartApiController extends Controller
      */
     public function index()
     {
-        $cart = Cart::where('user_id', Auth::id())->with('cartItems.product')->first();
-
-        if (!$cart) {
-            return response()->json(['message' => 'Cart is empty'], 200);
+        $cart = Cart::where('user_id', Auth::id())
+        ->with(['cartItems.product' => function ($query) {
+            $query->with('images'); // Ensure product images are included
+        }])
+        ->first();
+    
+    if (!$cart) {
+        return response()->json(['message' => 'Cart is empty'], 200);
+    }
+    
+    // Transform product image paths into full URLs
+    $cart->cartItems->each(function ($cartItem) {
+        if ($cartItem->product && $cartItem->product->images->isNotEmpty()) {
+            $cartItem->product->images->transform(function ($image) {
+                $image->image = $image->image ? url('storage/' . $image->image) : null;
+                return $image;
+            });
         }
-
-        return response()->json(['cart' => $cart], 200);
+    });
+    
+    return response()->json(['cart' => $cart], 200);
+    
     }
 
     /**
@@ -44,7 +59,7 @@ class CartApiController extends Controller
                             ->first();
 
         if ($cartItem) {
-            return response()->json(['message' => 'Product is already in cart!'], 409);
+            return response()->json(['message' => 'Product is already in cart!']);
         } else {
             // Add a new cart item
             $cartItem = CartItem::create([
@@ -56,7 +71,7 @@ class CartApiController extends Controller
 
         return response()->json([
             'message' => 'Product added to cart!',
-            'cartItem' => $cartItem,
+            'cartItem' => $cartItem->load('product'), // Include product details
         ], 201);
     }
 
@@ -72,4 +87,27 @@ class CartApiController extends Controller
             'cart' => $cart,
         ], 201);
     }
+
+    public function clearCart()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+    
+        $cart = Cart::where('user_id', $user->id)->first();
+    
+        if (!$cart) {
+            return response()->json(['message' => 'Cart is already empty'], 200);
+        }
+    
+        // Check if there are cart items before deleting
+        if ($cart->cartItems()->exists()) {
+            $cart->cartItems()->delete(); // Delete all cart items
+        }
+    
+        return response()->json(['message' => 'Cart cleared successfully'], 200);
+    }
+    
+    
 }
