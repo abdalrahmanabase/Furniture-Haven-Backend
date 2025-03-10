@@ -18,19 +18,26 @@ class WishlistitemApiController extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
         ]);
-
+    
         $wishlist = Wishlist::firstOrCreate(['user_id' => Auth::id()]);
-
+    
         $wishlistItem = WishlistItem::updateOrCreate([
             'product_id' => $request->product_id,
             'wishlist_id' => $wishlist->id,
         ]);
-
+    
         return response()->json([
             'message' => 'Item added to wishlist!',
-            'wishlist_item' => $wishlistItem
+            'wishlist_item' => [
+                'id' => $wishlistItem->id,
+                'product_id' => $wishlistItem->product_id,
+                'product_name' => $wishlistItem->product->title,
+                'product_price' => $wishlistItem->product->price,
+                'product_image' => asset('storage/' . $wishlistItem->product->image),
+            ]
         ], 201);
     }
+    
 
     /**
      * Remove an item from the wishlist.

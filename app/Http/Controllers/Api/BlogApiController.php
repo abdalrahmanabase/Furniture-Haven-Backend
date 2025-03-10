@@ -14,11 +14,20 @@ class BlogApiController extends Controller
      */
     public function index()
     {
-        // Fetch all blogs with category name
-        $blogs = Blog::with('category:id,name')->get();
+        $blogs = Blog::with(['category:id,name', 'user:id,user_name'])->get()->map(function ($blog) {
+            return [
+                'id' => $blog->id,
+                'title' => $blog->title,
+                'content' => $blog->content,
+                'category' => $blog->category,
+                'image' => $blog->image =  url('storage/' . $blog->image), 
+                'author' => $blog->user->user_name ?? 'Admin',
+                'created_at' => $blog->created_at
+            ];
+        });
 
         return response()->json(['blogs' => $blogs], 200);
-    }
+}
 
     /**
      * Store a newly created resource in storage.

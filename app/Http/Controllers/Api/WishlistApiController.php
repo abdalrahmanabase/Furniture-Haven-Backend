@@ -15,15 +15,30 @@ class WishlistApiController extends Controller
      * Get all wishlist items for the authenticated user.
      */
     public function index()
-    {
-        $wishlist = Wishlist::where('user_id', Auth::id())->with('wishlistItems.product')->first();
-        
-        return response()->json([
-            'wishlist' => $wishlist ?? [],
-            'message' => $wishlist ? 'Wishlist retrieved successfully.' : 'No wishlist found.',
-        ], 200);
+{
+    $wishlist = Wishlist::where('user_id', Auth::id())
+        ->with('wishlistItems.product') // Include the images relationship
+        ->first();
+
+    if ($wishlist) {
+        // Map wishlist items to include the main product image URL
+        $wishlist->wishlistItems->map(function ($item) {
+            if ($item->product->images->isNotEmpty()) {
+                // Use the first image as the main image
+                $item->product->image_url = url('storage/' . $item->product->images[0]->image);
+            } else {
+                // Fallback if no images are available
+                $item->product->image_url = null;
+            }
+            return $item;
+        });
     }
 
+    return response()->json([
+        'wishlist' => $wishlist ?? [],
+        'message' => $wishlist ? 'Wishlist retrieved successfully.' : 'No wishlist found.',
+    ], 200);
+}
     /**
      * Add a product to the wishlist.
      */
