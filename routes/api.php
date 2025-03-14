@@ -35,6 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('wishlist', WishlistApiController::class);
     Route::apiResource('wishlistitems', WishlistitemApiController::class);
     Route::post('/wishlist/add/{productId}', [WishlistApiController::class, 'addToWishlist'])->name('wishlist.add');
+    Route::post('/wishlist/remove/{productId}', [WishlistApiController::class, 'removeFromWishlist'])->name('wishlist.remove');
+
 
     Route::apiResource('orders', OrderApiController::class);
     Route::apiResource('orderitems', OrderitemApiController::class);

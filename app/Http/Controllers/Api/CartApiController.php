@@ -65,7 +65,7 @@ class CartApiController extends Controller
             $cartItem = CartItem::create([
                 'cart_id' => $cart->id,
                 'product_id' => $productId,
-                'quantity' => 1,
+                'quantity' => $request->quantity ?? 1,
             ]);
         }
 
