@@ -24,7 +24,7 @@
                     <td>
                         <ul>
                             @foreach($order->orderItems as $item)
-                                <li>{{ $item->product->name }} (x{{ $item->quantity }})</li>
+                                <li>{{ $item->product->title }} (x{{ $item->quantity }})</li>
                             @endforeach
                         </ul>
                     </td>
