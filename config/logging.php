@@ -82,15 +82,15 @@ return [
             'replace_placeholders' => true,
         ],
 
-     'papertrail' => [
+   'papertrail' => [
     'driver' => 'monolog',
     'level' => env('LOG_LEVEL', 'debug'),
-    'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
+    'handler' => SyslogUdpHandler::class,  // Direct assignment (corrected)
     'handler_with' => [
-        'host' => env('PAPERTRAIL_URL', null),
-        'port' => env('PAPERTRAIL_PORT', null),
-        'connectionString' => env('PAPERTRAIL_URL') && env('PAPERTRAIL_PORT') 
-            ? 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT') 
+        'host' => env('PAPERTRAIL_URL', 'logs.papertrailapp.com'),  // Set default if missing
+        'port' => env('PAPERTRAIL_PORT', 12345), // Set default port if missing
+        'connectionString' => env('PAPERTRAIL_URL') && env('PAPERTRAIL_PORT')
+            ? 'tls://' . (env('PAPERTRAIL_URL') ?? 'logs.papertrailapp.com') . ':' . (env('PAPERTRAIL_PORT') ?? 12345)
             : null,
     ],
     'processors' => [PsrLogMessageProcessor::class],
