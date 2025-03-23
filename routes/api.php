@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\ProductApiController;
 use App\Http\Controllers\Api\BrandApiController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartApiController;
-use App\Http\Controllers\Api\CartitemApiController;
+use App\Http\Controllers\Api\CartItemApiController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\OrderitemApiController;
 use App\Http\Controllers\Api\WishlistApiController;
@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/carts', [CartApiController::class, 'index']);
     Route::post('/carts', [CartApiController::class, 'store']);
     Route::delete('/carts/clear', [CartApiController::class, 'clearCart']);
-    Route::apiResource('cartitems', CartitemApiController::class);
+    Route::apiResource('cartitems', CartItemApiController::class);
     Route::post('/carts/add/{productId}', [CartApiController::class, 'addToCart'])->name('cart.add');
 
     Route::apiResource('wishlist', WishlistApiController::class);
