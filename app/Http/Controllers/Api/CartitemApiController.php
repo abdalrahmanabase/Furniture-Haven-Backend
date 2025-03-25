@@ -8,7 +8,7 @@ use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CartItemApiController extends Controller
+class CartitemApiController extends Controller
 {
     /**
      * Add a product to the cart (or update quantity).

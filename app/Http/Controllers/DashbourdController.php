@@ -31,11 +31,11 @@ class DashbourdController extends Controller
         $totalOrders = Order::count();
         $totalProducts = Product::count();
         $totalBlogs = Blog::count();
-        $salesData = Order::selectRaw('SUM(total_price) as total, strftime("%m", created_at) as month')
+        $salesData = Order::selectRaw('SUM(total_price) as total, DATE_FORMAT("%m", created_at) as month')
         ->groupBy('month')
         ->orderBy('month')
         ->get();
-        $userData = User::selectRaw('COUNT(id) as count, strftime("%m", created_at) as month')
+        $userData = User::selectRaw('COUNT(id) as count, DATE_FORMAT("%m", created_at) as month')
         ->groupBy('month')
         ->orderBy('month')
         ->get();

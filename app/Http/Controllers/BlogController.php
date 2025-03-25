@@ -52,7 +52,7 @@ class BlogController extends Controller
             'title' => 'required|string|unique:blogs,title',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);
     
         $imagePath = null;
@@ -94,7 +94,7 @@ class BlogController extends Controller
             'title' => 'required|string|unique:blogs,title,' . $blog->id,
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);
     
         if ($request->hasFile('image')) {

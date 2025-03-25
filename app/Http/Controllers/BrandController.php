@@ -30,7 +30,7 @@ class BrandController extends Controller
         // التحقق من البيانات المُدخلة
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:brands,name',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         // التحقق من وجود صورة
@@ -64,7 +64,7 @@ class BrandController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif', // Validate image
         ]);
 
         $brand = Brand::findOrFail($id);
