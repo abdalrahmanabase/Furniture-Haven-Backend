@@ -20,7 +20,6 @@ use App\Http\Controllers\DashbourdController;
 
 
 
-Route::get('/test',[TestController::class,'index'])->name('home');
 Route::get('/',[DashbourdController::class,'index'])->name('OverView');
 Route::get('users', [DashbourdController::class,'getallusers'])->name('users');
 Route::get('orders', [DashbourdController::class,'getallorders'])->name('orders');

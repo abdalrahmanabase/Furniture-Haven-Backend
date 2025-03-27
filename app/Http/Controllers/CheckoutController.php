@@ -8,6 +8,8 @@ use App\Models\CartItem;
 use App\Models\Cart;
 use App\Models\ShippingAddress;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
+use App\Models\Product;
 
 class CheckoutController extends Controller
 {
@@ -55,28 +57,38 @@ class CheckoutController extends Controller
     public function confirmOrder(Request $request)
     {
         $user = Auth::user();
-
-        // Fetch the user's cart
+    
         $cart = Cart::where('user_id', $user->id)->first();
-
+    
         if (!$cart) {
             return redirect()->route('carts.index')->with('error', 'Your cart is empty.');
         }
-
-        // Fetch cart items with products
+    
         $cartItems = $cart->cartItems()->with('product')->get();
-
+    
         if ($cartItems->isEmpty()) {
             return redirect()->route('carts.index')->with('error', 'Your cart is empty.');
         }
-
-        // Create the order using the OrderController's store method
+    
+        foreach ($cartItems as $item) {
+            if ($item->product->stock < $item->quantity) {
+                return redirect()->route('carts.index')->with('error', 'Some items are out of stock.');
+            }
+        }
+    
+        foreach ($cartItems as $item) {
+            $product = $item->product;
+            $newStock = $product->stock - $item->quantity;
+    
+            $product->update(['stock' => $newStock]); // Directly updating stock
+        }
+    
         $orderController = new OrderController();
         $orderController->store($request);
-
-        // Clear the cart
+    
         $cart->cartItems()->delete();
-
+    
         return redirect()->route('order.index')->with('success', 'Order confirmed successfully!');
     }
+    
 }

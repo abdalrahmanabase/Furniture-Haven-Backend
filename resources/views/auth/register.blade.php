@@ -3,22 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laravel App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Furniture-Haven Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
+    <style>
+        .required-star { color: red; margin-left: 5px; }
+    </style>
 </head>
-<body>
-<div class="container">
-    <h2>Register</h2>
+<body class="bg-gray-100">
+
+<div class="max-w-lg mx-auto mt-10 bg-white p-8 shadow-md rounded-lg">
+    <h2 class="text-2xl font-bold text-center">Register</h2>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
+            {{ session('success') }}
+        </div>
     @endif
 
     @if ($errors->any())
-        <div class="alert alert-danger">
+        <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -29,42 +34,44 @@
 
     <form action="{{ route('register') }}" method="POST">
         @csrf
-        <div class="mb-3">
-            <label>Name</label>
-            <input type="text" name="user_name" class="form-control" required value="{{ old('user_name') }}">
+        <div class="mb-4">
+            <label class="block text-gray-700 font-semibold">Name <span class="required-star">*</span></label>
+            <input type="text" name="user_name" class="w-full px-4 py-2 border rounded-lg @error('user_name') border-red-500 @enderror" value="{{ old('user_name') }}" required>
             @error('user_name')
-                <span class="text-danger">{{ $message }}</span>
+                <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" required value="{{ old('email') }}">
+        <div class="mb-4">
+            <label class="block text-gray-700 font-semibold">Email <span class="required-star">*</span></label>
+            <input type="email" name="email" class="w-full px-4 py-2 border rounded-lg @error('email') border-red-500 @enderror" value="{{ old('email') }}" required>
             @error('email')
-                <span class="text-danger">{{ $message }}</span>
+                <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label>Password</label>
-            <input type="password" name="password" class="form-control" required>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-semibold">Password <span class="required-star">*</span></label>
+            <input type="password" name="password" class="w-full px-4 py-2 border rounded-lg @error('password') border-red-500 @enderror" required>
             @error('password')
-                <span class="text-danger">{{ $message }}</span>
+                <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
         </div>
 
-        <div class="mb-3">
-            <label>Confirm Password</label>
-            <input type="password" name="password_confirmation" class="form-control" required>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-semibold">Confirm Password <span class="required-star">*</span></label>
+            <input type="password" name="password_confirmation" class="w-full px-4 py-2 border rounded-lg @error('password_confirmation') border-red-500 @enderror" required>
             @error('password_confirmation')
-                <span class="text-danger">{{ $message }}</span>
+                <p class="text-red-500 text-sm">{{ $message }}</p>
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+            Register
+        </button>
     </form>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.js"></script>
 </body>
 </html>
-

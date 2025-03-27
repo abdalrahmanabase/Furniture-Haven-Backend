@@ -1,8 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .required-field::after {
+        content: " *";
+        color: red;
+    }
+</style>
+
 <div class="container">
-    <h2>Edit Blog</h2>
+    <h2 class="mb-4">Edit Blog</h2>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -19,43 +26,57 @@
         @method('PUT')
 
         <div class="mb-3">
-            <label class="form-label">Title</label>
-            <input type="text" name="title" class="form-control" value="{{ old('title', $blog->title) }}" required>
+            <label for="title" class="required-field">Title</label>
+            <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $blog->title) }}" required>
+            @error('title')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Category</label>
-            <select name="category_id" class="form-control" required>
+            <label for="category_id" class="required-field">Category</label>
+            <select name="category_id" id="category_id" class="form-control" required>
                 <option value="">Select Category</option>
                 @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" {{ $category->id == $blog->category_id ? 'selected' : '' }}>
+                    <option value="{{ $category->id }}" {{ old('category_id', $blog->category_id) == $category->id ? 'selected' : '' }}>
                         {{ $category->name }}
                     </option>
                 @endforeach
             </select>
+            @error('category_id')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Content</label>
-            <textarea name="content" class="form-control" rows="5" required>{{ old('content', $blog->content) }}</textarea>
+            <label for="content" class="required-field">Content</label>
+            <textarea name="content" id="content" class="form-control" rows="5" required>{{ old('content', $blog->content) }}</textarea>
+            @error('content')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Current Image</label><br>
+            <label>Current Image:</label><br>
             @if ($blog->image)
-                <img src="{{ asset('storage/' . $blog->image) }}" width="100" alt="{{ $blog->title }}">
+                <img src="{{ asset('storage/' . $blog->image) }}" width="100" class="img-thumbnail" alt="{{ $blog->title }}">
             @else
-                No Image
+                <p>No Image</p>
             @endif
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Change Image</label>
+            <label>Change Image:</label>
             <input type="file" name="image" class="form-control">
+            @error('image')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Update Blog</button>
-        <a href="{{ route('blogs.index') }}" class="btn btn-secondary">Cancel</a>
+        <div class="d-flex justify-content-between mt-4">
+            <button type="submit" class="btn btn-primary">Update Blog</button>
+            <a href="{{ route('blogs.index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
     </form>
 </div>
 @endsection

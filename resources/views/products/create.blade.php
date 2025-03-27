@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .required-field::after {
+        content: " *";
+        color: red;
+    }
+</style>
+
 <div class="container">
     <h2 class="mb-4">Add New Product</h2>
 
@@ -18,20 +25,20 @@
         @csrf
 
         <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
+            <label for="title" class="form-label required-field">Title</label>
             <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" required>
             @error('title') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
 
         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
+            <label for="description" class="form-label required-field">Description</label>
             <textarea name="description" id="description" class="form-control" rows="3" required>{{ old('description') }}</textarea>
             @error('description') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label for="price" class="form-label">Price ($)</label>
+                <label for="price" class="form-label required-field">Price ($)</label>
                 <input type="number" name="price" id="price" class="form-control" step="0.01" value="{{ old('price') }}" required>
                 @error('price') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
@@ -51,15 +58,15 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label for="stock" class="form-label">Stock</label>
-                <input type="number" name="stock" id="stock" class="form-control" value="{{ old('stock') }}">
+                <label for="stock" class="form-label required-field">Stock</label>
+                <input type="number" name="stock" id="stock" class="form-control" required value="{{ old('stock') }}">
                 @error('stock') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label for="category_id" class="form-label">Category</label>
+                <label for="category_id" class="form-label required-field">Category</label>
                 <select name="category_id" id="category_id" class="form-control" required>
                     <option value="">Select a Category</option>
                     @foreach($categories as $category)
@@ -72,7 +79,7 @@
             </div>
 
             <div class="col-md-6 mb-3">
-                <label for="brand_id" class="form-label">Brand</label>
+                <label for="brand_id" class="form-label required-field">Brand</label>
                 <select name="brand_id" id="brand_id" class="form-control" required>
                     <option value="">Select a Brand</option>
                     @foreach($brands as $brand)
@@ -86,7 +93,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="image" class="form-label">Main Product Image</label>
+            <label for="image" class="form-label required-field">Main Product Image</label>
             <input type="file" name="image" class="form-control" required>
             @error('image') <span class="text-danger">{{ $message }}</span> @enderror
         </div>

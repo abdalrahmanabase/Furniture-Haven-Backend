@@ -3,10 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laravel App</title>
+    <title>Furniture-Haven Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <style>.required-field::after {
+        content: " *";
+        color: red;
+    }</style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -53,8 +58,12 @@
     <div class="contentmain">
             <nav>
                 <div class="navdiv1">
-                    <h3>Hello {{ Auth::user()->user_name }}</h3>
-                    <span>Dashbourd / </span>
+                    @if(auth()->check())
+                    <h3>Hello {{ auth()->user()->user_name }}</h3>
+                @else
+                    <script>window.location.href = "{{ route('login') }}";</script>
+                @endif
+                                    <span>Dashbourd / </span>
                     <p>{{Route::currentRouteName()}}</p>
                 </div>
                 <div class="navdiv2">

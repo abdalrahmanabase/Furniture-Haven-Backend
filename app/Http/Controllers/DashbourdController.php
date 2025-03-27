@@ -13,6 +13,7 @@ use App\Models\CartItem;
 use App\Models\Cart;
 use App\Models\Blog;
 use App\Models\User;
+use Carbon\Carbon;
 
 
 class DashbourdController extends Controller
@@ -31,26 +32,35 @@ class DashbourdController extends Controller
         $totalOrders = Order::count();
         $totalProducts = Product::count();
         $totalBlogs = Blog::count();
-        $salesData = Order::selectRaw('SUM(total_price) as total, DATE_FORMAT("%m", created_at) as month')
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get();
-        $userData = User::selectRaw('COUNT(id) as count, DATE_FORMAT("%m", created_at) as month')
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get();
+
+        // Fetch sales data grouped by month
+        $salesData = Order::selectRaw('SUM(total_price) as total, DATE_FORMAT(created_at, "%Y-%m") as month')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // Fetch user registrations grouped by month
+        $userData = User::selectRaw('COUNT(id) as count, DATE_FORMAT(created_at, "%Y-%m") as month')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // Fetch all users with last login and order count
         $usersdal = User::select('id', 'user_name', 'email')
-        ->withCount('orders') // Counts total orders per user
-        ->get()
-        ->map(function ($user) {
-            $lastSession = DB::table('sessions')
-                ->where('user_id', $user->id)
-                ->orderByDesc('last_activity') // Get the most recent session
-                ->first();
-            $user->last_login_at = $lastSession ? \Carbon\Carbon::createFromTimestamp($lastSession->last_activity) : null;
-            return $user;
-        });
-        return view('dashbourd.dashbourd', compact('products', 'categories', 'brands', 'orders', 'blogs', 'users','totalCustomers','totalOrders','totalProducts','totalBlogs','salesData','userData','usersdal'));
+            ->withCount('orders') // Count total orders per user
+            ->get()
+            ->map(function ($user) {
+                $lastSession = DB::table('sessions')
+                    ->where('user_id', $user->id)
+                    ->orderByDesc('last_activity') // Get the most recent session
+                    ->first();
+                $user->last_login_at = $lastSession ? Carbon::createFromTimestamp($lastSession->last_activity) : null;
+                return $user;
+            });
+            return view('dashbourd.dashbourd', compact(
+                'totalCustomers', 'totalOrders', 'totalProducts', 'totalBlogs',
+                'salesData', 'userData', 'usersdal'
+            ));
     }
     
     public function getallusers(){

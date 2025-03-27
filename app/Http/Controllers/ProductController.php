@@ -45,7 +45,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
             'rate' => 'nullable|numeric',
-            'stock' => 'nullable|numeric',
+            'stock' => 'required|integer|min:0', // Stock is now required
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif',
@@ -54,32 +54,14 @@ class ProductController extends Controller
             'thumbnail3' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'thumbnail4' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
-
+    
         $product = Product::create($request->only([
             'title', 'description', 'price', 'discount', 'rate', 'stock', 'category_id', 'brand_id'
         ]));
-
-        $imagePath = $request->file('image')->store('product_images', 'public');
-
-        $thumbnails = [];
-        foreach (['thumbnail1', 'thumbnail2', 'thumbnail3', 'thumbnail4'] as $thumb) {
-            if ($request->hasFile($thumb)) {
-                $thumbnails[$thumb] = $request->file($thumb)->store('product_images/thumbnails', 'public');
-            }
-        }
-
-        ProductImage::create([
-            'product_id' => $product->id,
-            'image' => $imagePath,
-            'thumbnail1' => $thumbnails['thumbnail1'] ?? null,
-            'thumbnail2' => $thumbnails['thumbnail2'] ?? null,
-            'thumbnail3' => $thumbnails['thumbnail3'] ?? null,
-            'thumbnail4' => $thumbnails['thumbnail4'] ?? null,
-        ]);
-
+    
         return redirect()->route('products.index')->with('success', 'Product created successfully with images!');
     }
-
+    
     public function update(Request $request, Product $product)
     {
         $request->validate([
@@ -88,43 +70,29 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
             'rate' => 'nullable|numeric',
-            'stock' => 'nullable|numeric',
+            'stock' => 'required|integer|min:0', // Stock is now required
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'thumbnail1' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'thumbnail2' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'thumbnail3' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'thumbnail4' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
-
+    
         $product->update($request->only([
             'title', 'description', 'price', 'discount', 'rate', 'stock', 'category_id', 'brand_id'
         ]));
-
-        $productImage = $product->images()->first();
-
-        if (!$productImage) {
-            $productImage = new ProductImage(['product_id' => $product->id]);
-        }
-
-        if ($request->hasFile('image')) {
-            Storage::disk('public')->delete($productImage->image);
-            $productImage->image = $request->file('image')->store('product_images', 'public');
-        }
-
-        foreach (['thumbnail1', 'thumbnail2', 'thumbnail3', 'thumbnail4'] as $thumb) {
-            if ($request->hasFile($thumb)) {
-                Storage::disk('public')->delete($productImage->$thumb);
-                $productImage->$thumb = $request->file($thumb)->store('product_images/thumbnails', 'public');
-            }
-        }
-
-        $productImage->save();
-
-        return redirect()->route('products.index')->with('success', 'Product updated successfully with images!');
+    
+        return redirect()->route('products.index')->with('success', 'Product updated successfully!');
     }
-
+    
+    public function updateStock(Request $request, Product $product)
+    {
+        $request->validate([
+            'stock' => 'required|integer|min:0', // Ensure stock is required
+        ]);
+    
+        $product->update(['stock' => $request->stock]);
+    
+        return response()->json(['message' => 'Stock updated successfully']);
+    }
+    
     public function destroy(Product $product)
     {
         $product->delete();
